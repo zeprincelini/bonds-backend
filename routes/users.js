@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/UserController/user.controller");
+const verifyToken = require("../helper/verify.token");
 
-router.put("/:id", controller.updateAccount);
+router.put("/:id", verifyToken, controller.updateAccount);
 
-router.delete("/:id", controller.deleteAccount);
+router.delete("/:id", verifyToken, controller.deleteAccount);
 
-router.get("/:id", controller.getAccountById);
+router.get("/:id", verifyToken, controller.getAccountById);
 
-router.put("/:id/follow", controller.followAccount);
+router.put("/:id/follow", verifyToken, controller.followAccount);
 
-router.put("/:id/unfollow", controller.unfollowAccount);
+router.put("/:id/unfollow", verifyToken, controller.unfollowAccount);
 
 module.exports = router;
