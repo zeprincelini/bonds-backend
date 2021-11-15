@@ -106,6 +106,16 @@ const getFriendPosts = async (req, res) => {
   }
 };
 
+const getPostbyId = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    const { _id, updatedAt, ...rest } = post._doc;
+    res.status("200").json({ status: "success", data: rest });
+  } catch (err) {
+    return res.status("403").json(err);
+  }
+};
+
 module.exports = {
   createPost,
   updatePost,
@@ -113,4 +123,5 @@ module.exports = {
   likePost,
   getUserPosts,
   getFriendPosts,
+  getPostbyId,
 };
