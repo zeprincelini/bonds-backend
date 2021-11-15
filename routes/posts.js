@@ -7,20 +7,7 @@ router.post("/", controller.createPost);
 
 router.put("/:id", controller.updatePost);
 
-router.delete("/:id", async (req, res) => {
-  const post = await Post.findById(req.params.id);
-  if (post.userId === req.body.userId) {
-    try {
-      await post.deleteOne();
-      return res
-        .status("200")
-        .json({ status: "success", message: "Post deleted successfully" });
-    } catch (err) {
-      return res.status("403").json(err);
-    }
-  }
-  return res.status("401").json({ error: "post not found" });
-});
+router.delete("/:id", controller.deletePost);
 
 router.put("/:id/like", async (req, res) => {
   const id = req.params.id;

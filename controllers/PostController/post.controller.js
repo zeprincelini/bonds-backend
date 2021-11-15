@@ -37,4 +37,19 @@ const updatePost = async (req, res) => {
   return res.status("401").json({ error: "post not found" });
 };
 
-module.exports = { createPost, updatePost };
+const deletePost = async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (post.userId === req.body.userId) {
+    try {
+      await post.deleteOne();
+      return res
+        .status("200")
+        .json({ status: "success", message: "Post deleted successfully" });
+    } catch (err) {
+      return res.status("403").json(err);
+    }
+  }
+  return res.status("401").json({ error: "post not found" });
+};
+
+module.exports = { createPost, updatePost, deletePost };
