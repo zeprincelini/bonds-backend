@@ -52,4 +52,65 @@ const deletePost = async (req, res) => {
   return res.status("401").json({ error: "post not found" });
 };
 
-module.exports = { createPost, updatePost, deletePost };
+const likePost = async (req, res) => {
+  const id = req.params.id;
+  const post = await Post.findById(id);
+  if (post.userId === req.body.userId) {
+    return res.status("401").json({ error: "you can't like your own post" });
+  }
+  if (post) {
+    if (!post.likes.includes(req.body.userId)) {
+      try {
+        await post.updateOne({ $push: { likes: req.body.userId } });
+        return res
+          .status("200")
+          .json({ status: "success", message: "Post liked successfully" });
+      } catch (err) {
+        res.status("401").json({ err });
+      }
+    } else {
+      try {
+        await post.updateOne({ $pull: { likes: req.body.userId } });
+        return res
+          .status("200")
+          .json({ status: "success", message: "Post disliked successfully" });
+      } catch (err) {
+        res.status("401").json({ err });
+      }
+    }
+  }
+  return res.status("401").json({ error: "post does not exist" });
+};
+
+const getUserPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const userPosts = await Post.find({ userId: user._id });
+    return res.status("200").json({ status: "success", data: userPosts });
+  } catch (err) {
+    return res.status("401").json(err);
+  }
+};
+
+const getFriendPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const friendsPosts = await Promise.all(
+      user.following.map((id) => {
+        return Post.find({ userId: id });
+      })
+    );
+    return res.status("200").json({ status: "success", data: friendsPosts });
+  } catch (err) {
+    return res.status("401").json(err);
+  }
+};
+
+module.exports = {
+  createPost,
+  updatePost,
+  deletePost,
+  likePost,
+  getUserPosts,
+  getFriendPosts,
+};
