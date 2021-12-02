@@ -39,7 +39,7 @@ const login = async (req, res) => {
     if (user) {
       const validPassword = await bcrypt.compare(password, user.password);
       if (!validPassword) {
-        res.status("400").json({
+        return res.status("400").json({
           error: "email/password incorrect",
         });
       }
@@ -47,7 +47,7 @@ const login = async (req, res) => {
         { id: user._id, email: user.email, isAdmin: user.isAdmin },
         process.env.SECRET
       );
-      res.status("200").json({
+      return res.status("200").json({
         status: "success",
         message: "Login successful",
         data: {
@@ -57,10 +57,10 @@ const login = async (req, res) => {
         },
       });
     } else {
-      res.status("404").json({ error: "user does not exist" });
+      return res.status("404").json({ error: "user does not exist" });
     }
   } catch (err) {
-    res.status("500").json(err);
+    return res.status("500").json(err);
   }
 };
 

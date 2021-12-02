@@ -2,6 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const dotenv = require("dotenv").config();
 const morgan = require("morgan");
+const cors = require("cors");
 
 const db = require("./db/db");
 const userRoute = require("./routes/users");
@@ -11,6 +12,7 @@ db();
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 app.use(morgan("dev"));
 app.use(helmet());
 app.use("/api/user", userRoute);
