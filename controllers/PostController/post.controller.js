@@ -95,12 +95,15 @@ const getUserPosts = async (req, res) => {
 const getFriendPosts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
+    const userPost = await Post.find({ userId: user._id });
     const friendsPosts = await Promise.all(
       user.following.map((id) => {
         return Post.find({ userId: id });
       })
     );
-    return res.status("200").json({ status: "success", data: friendsPosts });
+    return res
+      .status("200")
+      .json({ status: "success", data: friendsPosts.flat() });
   } catch (err) {
     return res.status("401").json(err);
   }
