@@ -2,7 +2,7 @@ const Post = require("../../models/post");
 const User = require("../../models/user");
 
 const createPost = async (req, res) => {
-  const user = await User.findById(req.body.userId);
+  const user = await User.findById(req.body.user);
   if (user) {
     try {
       const newPost = new Post(req.body);
@@ -85,7 +85,7 @@ const likePost = async (req, res) => {
 const getUserPosts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    const userPosts = await Post.find({ userId: user._id });
+    const userPosts = await Post.find({ user: user._id });
     return res.status("200").json({ status: "success", data: userPosts });
   } catch (err) {
     return res.status("401").json(err);
@@ -95,10 +95,9 @@ const getUserPosts = async (req, res) => {
 const getFriendPosts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    const userPost = await Post.find({ userId: user._id });
     const friendsPosts = await Promise.all(
       user.following.map((id) => {
-        return Post.find({ userId: id });
+        return Post.find({ user: id }).populate("user");
       })
     );
     return res
