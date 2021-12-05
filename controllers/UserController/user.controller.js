@@ -109,10 +109,20 @@ const unfollowAccount = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json(users);
+  } catch (err) {
+    return res.status(401).json(err);
+  }
+};
+
 module.exports = {
   updateAccount,
   deleteAccount,
   getAccountById,
   followAccount,
   unfollowAccount,
+  getAllUsers,
 };
