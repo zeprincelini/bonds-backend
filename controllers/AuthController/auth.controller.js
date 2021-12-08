@@ -52,7 +52,9 @@ const login = async (req, res) => {
         message: "Login successful",
         data: {
           username: user.username,
+          id: user._id,
           isAdmin: user.isAdmin,
+          email: user.email,
           accessToken: token,
         },
       });
