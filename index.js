@@ -3,6 +3,7 @@ const helmet = require("helmet");
 const dotenv = require("dotenv").config();
 const morgan = require("morgan");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const db = require("./db/db");
 const userRoute = require("./routes/users");
@@ -12,7 +13,13 @@ db();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(morgan("dev"));
 app.use(helmet());
 app.use("/api/user", userRoute);

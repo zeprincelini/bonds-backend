@@ -47,6 +47,17 @@ const login = async (req, res) => {
         { id: user._id, email: user.email, isAdmin: user.isAdmin },
         process.env.SECRET
       );
+      res
+        .cookie("token", token, {
+          expires: new Date(Date.now() + 86400 * 1000),
+          secure: false,
+          httpOnly: false,
+        })
+        .cookie("id", JSON.stringify(user._id), {
+          expires: new Date(Date.now() + 86400 * 1000),
+          secure: false,
+          httpOnly: false,
+        });
       return res.status("200").json({
         status: "success",
         message: "Login successful",
