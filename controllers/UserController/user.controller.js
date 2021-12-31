@@ -109,6 +109,21 @@ const unfollowAccount = async (req, res) => {
   }
 };
 
+const getFriends = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await User.findById(id);
+    const followers = await Promise.all(
+      user.following.map((id) => {
+        return User.findById(id);
+      })
+    );
+    res.status(200).json({ status: "success", data: followers });
+  } catch (err) {
+    return res.status(403).json({ error: err });
+  }
+};
+
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -125,4 +140,5 @@ module.exports = {
   followAccount,
   unfollowAccount,
   getAllUsers,
+  getFriends,
 };

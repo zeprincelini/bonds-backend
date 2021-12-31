@@ -5,7 +5,11 @@ const createPost = async (req, res) => {
   const user = await User.findById(req.body.user);
   if (user) {
     try {
-      const newPost = new Post(req.body);
+      const newPost = new Post({
+        user: req.body.user,
+        description: req.body.description,
+        img: req.file.path ? req.file.path : null,
+      });
       const post = await newPost.save();
       res.status("200").json({
         status: "success",
@@ -13,7 +17,10 @@ const createPost = async (req, res) => {
         data: post,
       });
     } catch (err) {
-      return res.status("403").json(err);
+      console.log(err);
+      return res.status("403").json({
+        error: "failed to create post",
+      });
     }
   } else {
     return res.status("403").json({
@@ -95,14 +102,18 @@ const getUserPosts = async (req, res) => {
 const getFriendPosts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
+    const usersPosts = await Post.find({ user: req.params.id }).populate(
+      "user"
+    );
     const friendsPosts = await Promise.all(
       user.following.map((id) => {
         return Post.find({ user: id }).populate("user");
       })
     );
-    return res
-      .status("200")
-      .json({ status: "success", data: friendsPosts.flat() });
+    return res.status("200").json({
+      status: "success",
+      data: usersPosts.concat(friendsPosts.flat()),
+    });
   } catch (err) {
     return res.status("401").json(err);
   }
@@ -110,8 +121,8 @@ const getFriendPosts = async (req, res) => {
 
 const getPostbyId = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    const { _id, updatedAt, ...rest } = post._doc;
+    const post = await Post.findById(req.params.id).populate("user");
+    const { updatedAt, ...rest } = post._doc;
     res.status("200").json({ status: "success", data: rest });
   } catch (err) {
     return res.status("403").json(err);

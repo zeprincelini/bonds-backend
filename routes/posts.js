@@ -1,8 +1,14 @@
 const router = require("express").Router();
 const controller = require("../controllers/PostController/post.controller");
 const verifyToken = require("../helper/verify.token");
+const uploadFile = require("../helper/multer-cloudinary");
 
-router.post("/", verifyToken, controller.createPost);
+router.post(
+  "/",
+  verifyToken,
+  uploadFile.single("postImg"),
+  controller.createPost
+);
 
 router.put("/:id", verifyToken, controller.updatePost);
 
