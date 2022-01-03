@@ -59,7 +59,7 @@ const getAccountById = async (req, res) => {
     const { password, updatedAt, isAdmin, ...rest } = user._doc;
     return res.status("200").json({ status: "success", data: rest });
   } catch (err) {
-    return res.status("404").json(err);
+    return res.status("404").json(err.message);
   }
 };
 
@@ -90,41 +90,23 @@ const followAccount = async (req, res) => {
   }
 };
 
-const unfollowAccount = async (req, res) => {
-  const id = req.params.id;
-  if (req.body.userId !== id) {
-    try {
-      const user = await User.findById(id);
-      const currentUser = await User.findById(req.body.userId);
-      if (currentUser.following.includes(id)) {
-        await user.updateOne({ $pull: { followers: req.body.userId } });
-        await currentUser.updateOne({ $pull: { following: id } });
-        return res
-          .status("200")
-          .json({ status: "success", message: "user unfollowed successfully" });
-      } else {
-        return res.status("403").json("you don't follow this user");
-      }
-    } catch (err) {
-      return res.status("401").json("user does not exist");
-    }
-  } else {
-    return res.status("403").json({ error: "cannot unfollow yourself" });
-  }
-};
-
 const getFriends = async (req, res) => {
   const id = req.params.id;
   try {
     const user = await User.findById(id);
-    const followers = await Promise.all(
+    const friends = await Promise.all(
       user.following.map((id) => {
         return User.findById(id);
       })
     );
-    res.status(200).json({ status: "success", data: followers });
+    let friendData = [];
+    friends.map((friend) => {
+      const { _id, username, profilePicture } = friend;
+      friendData.push({ _id, username, profilePicture });
+    });
+    res.status(200).json({ status: "success", data: friendData });
   } catch (err) {
-    return res.status(403).json({ error: err });
+    return res.status(403).json({ error: err.message });
   }
 };
 
@@ -133,7 +115,7 @@ const getAllUsers = async (req, res) => {
     const users = await User.find();
     return res.status(200).json(users);
   } catch (err) {
-    return res.status(401).json(err);
+    return res.status(401).json(err.message);
   }
 };
 
@@ -142,7 +124,6 @@ module.exports = {
   deleteAccount,
   getAccountById,
   followAccount,
-  unfollowAccount,
   getAllUsers,
   getFriends,
 };

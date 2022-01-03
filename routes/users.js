@@ -13,6 +13,4 @@ router.get("/:id", verifyToken, controller.getAccountById);
 
 router.put("/:id/follow", verifyToken, controller.followAccount);
 
-router.put("/:id/unfollow", verifyToken, controller.unfollowAccount);
-
 module.exports = router;
