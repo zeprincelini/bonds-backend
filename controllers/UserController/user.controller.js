@@ -76,10 +76,14 @@ const followAccount = async (req, res) => {
           .status("200")
           .json({ status: "success", message: "user followed successfully" });
       } else {
-        return res.status("403").json("you already follow this user");
+        await user.updateOne({ $pull: { followers: req.body.userId } });
+        await currentUser.updateOne({ $pull: { following: id } });
+        return res
+          .status("200")
+          .json({ status: "success", message: "user unfollowed successfully" });
       }
     } catch (err) {
-      return res.status("401").json("user does not exist");
+      return res.status("401").json("Error following user");
     }
   } else {
     return res.status("403").json({ error: "cannot follow yourself" });
