@@ -15,7 +15,7 @@ const createChat = async (req, res) => {
 };
 
 const getChats = async (req, res) => {
-  const id = req.paarams.id;
+  const id = req.params.id;
   try {
     const chats = await Chat.find({
       conversationId: id,
