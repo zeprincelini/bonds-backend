@@ -111,9 +111,14 @@ const getFriends = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
+  const { limit = 10, page = 1 } = req.query;
+
   try {
-    const users = await User.find();
-    return res.status(200).json(users);
+    const users = await User.find()
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+    const totalCount = await User.count();
+    return res.status(200).json({ data: users, total_count: totalCount });
   } catch (err) {
     return res.status(401).json(err.message);
   }
