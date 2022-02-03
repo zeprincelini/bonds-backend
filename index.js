@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config();
 const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const io = require("./socket/socket");
 
 const db = require("./db/db");
 db();
