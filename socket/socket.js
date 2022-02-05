@@ -5,18 +5,31 @@ const io = require("socket.io")(8900, {
 });
 
 let users = [];
+
 const addUser = (userId, socketId) => {
   if (!users.some((user) => user.userId === userId)) {
     users.push({ userId, socketId });
   }
 };
 
+const removeUser = (socketId) => {
+  users = users.filter((socket) => {
+    return socket.socketId !== socketId;
+  });
+};
+
 io.on("connection", (socket) => {
   console.log("a user connected");
   socket.on("addUser", (userId) => {
     addUser(userId, socket.id);
+    io.emit("allUsers", users);
   });
-  io.emit("allUsers", users);
+
+  socket.on("disconnect", () => {
+    console.log("user left the chat");
+    removeUser(socket.id);
+    io.emit("allUsers", users);
+  });
 });
 
 module.exports = io;
