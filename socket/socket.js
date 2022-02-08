@@ -18,11 +18,23 @@ const removeUser = (socketId) => {
   });
 };
 
+const getUser = (userId) => {
+  const receiver = users.find((user) => user.userId === userId);
+  return receiver;
+};
+
 io.on("connection", (socket) => {
-  console.log("a user connected");
   socket.on("addUser", (userId) => {
     addUser(userId, socket.id);
     io.emit("allUsers", users);
+  });
+
+  socket.on("sendMessage", ({ senderId, receiverId, message }) => {
+    const receiver = getUser(receiverId);
+    io.to(receiver.socketId).emit("getMessage", {
+      senderId,
+      message,
+    });
   });
 
   socket.on("disconnect", () => {

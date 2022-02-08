@@ -3,6 +3,7 @@ const User = require("../../models/user");
 
 const createPost = async (req, res) => {
   const user = await User.findById(req.body.user);
+  console.log(req.file);
   if (user) {
     try {
       const newPost = new Post({

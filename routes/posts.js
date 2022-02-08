@@ -6,7 +6,7 @@ const uploadFile = require("../helper/multer-cloudinary");
 router.post(
   "/",
   verifyToken,
-  uploadFile.single("postImg"),
+  uploadFile,
   controller.createPost
 );
 
