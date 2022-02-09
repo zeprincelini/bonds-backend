@@ -3,7 +3,6 @@ const User = require("../../models/user");
 
 const createPost = async (req, res) => {
   const user = await User.findById(req.body.user);
-  console.log(req.file);
   if (user) {
     try {
       const newPost = new Post({
@@ -63,6 +62,9 @@ const deletePost = async (req, res) => {
 const likePost = async (req, res) => {
   const id = req.params.id;
   const post = await Post.findById(id);
+  if (!post) {
+    return res.status(401).json({ error: "post does not exist" });
+  }
   if (post.userId === req.body.userId) {
     return res.status("401").json({ error: "you can't like your own post" });
   }

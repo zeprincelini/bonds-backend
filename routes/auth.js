@@ -6,4 +6,8 @@ router.post("/register", controller.register);
 
 router.post("/login", controller.login);
 
+router.post("/forgot/password", controller.forgotPassword);
+
+router.patch("/reset/password/:id", controller.resetPassword);
+
 module.exports = router;
