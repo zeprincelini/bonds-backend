@@ -12,19 +12,24 @@ const updateAccount = async (req, res) => {
         return res.status("500").json(err);
       }
     }
+    if (req.body.tag) {
+      const { tag } = req.body;
+      const data = { ...req.body, [tag]: req.file.path };
+      req.body = data;
+    }
     try {
       await User.findByIdAndUpdate(id, {
         $set: req.body,
       });
-      res.status("200").json({
+      return res.status(200).json({
         status: "success",
         message: "Account updated successfully",
       });
     } catch (err) {
-      return res.status("500").json(err);
+      return res.status(500).json(err.message);
     }
   } else {
-    return res.status("500").json({ error: "invalid account details" });
+    return res.status(500).json({ error: "invalid account details" });
   }
 };
 
