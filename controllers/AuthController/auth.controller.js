@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// const mailgunClient = require("../../helper/email/mailgun");
+const mailgunClient = require("../../helper/email/mailgun");
 const User = require("../../models/user");
 const resetTemplate = require("../../helper/email/resetPassword");
 
@@ -99,7 +99,7 @@ const forgotPassword = async (req, res) => {
         from: process.env.MAIL_ADDRESS,
         to: email,
         subject: "Reset Password",
-        html: resetTemplate(`${process.env.URL}/reset/${user._id}`),
+        html: resetTemplate(process.env.URL, user._id),
       };
       try {
         await mailgunClient.messages.create(
