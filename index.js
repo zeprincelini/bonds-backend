@@ -13,6 +13,7 @@ const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
 const conversationRoute = require("./routes/conversation");
 const chatRoute = require("./routes/chats");
+const commentRoute = require("./routes/comment");
 const app = express();
 
 app.use(express.json());
@@ -31,6 +32,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/post", postRoute);
 app.use("/api/conversation", conversationRoute);
 app.use("/api/chat", chatRoute);
+app.use("/api/comment", commentRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
