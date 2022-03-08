@@ -98,7 +98,7 @@ const getUserPosts = async (req, res) => {
     const userPosts = await Post.find({ user: user._id });
     return res.status("200").json({ status: "success", data: userPosts });
   } catch (err) {
-    return res.status("401").json(err);
+    return res.status("401").json(err.message);
   }
 };
 

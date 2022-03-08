@@ -97,6 +97,10 @@ const followAccount = async (req, res) => {
 
 const getFriends = async (req, res) => {
   const id = req.params.id;
+  let filter = {};
+  if (req.query.search) {
+    filter.username = req.query.search;
+  }
   try {
     const user = await User.findById(id);
     const friends = await Promise.all(
@@ -109,6 +113,11 @@ const getFriends = async (req, res) => {
       const { _id, username, profilePicture } = friend;
       friendData.push({ _id, username, profilePicture });
     });
+    // if (filter.username) {
+    //   friendData = friendData.filter((user) => {
+    //     return user.username === filter.username;
+    //   });
+    // }
     res.status(200).json({ status: "success", data: friendData });
   } catch (err) {
     return res.status(403).json({ error: err.message });

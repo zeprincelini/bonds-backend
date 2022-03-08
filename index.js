@@ -24,13 +24,6 @@ app.use(
   })
 );
 
-// app.use(express.static(path.join(__dirname, "")));
-// app.use("/api", api);
-//paths to be added
-// app.get("/*", (req, res) => {
-//   res.sendFile(path.join(__dirname, ""));
-// });
-
 app.use(morgan("dev"));
 app.use(helmet());
 app.use("/api/user", userRoute);
