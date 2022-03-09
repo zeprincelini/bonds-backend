@@ -32,9 +32,9 @@ const createComment = async (req, res) => {
 };
 
 const getComments = async (req, res) => {
-  const { postId } = req.body;
+  const { id } = req.params;
   try {
-    const comments = await Comment.find({ post: postId });
+    const comments = await Comment.find({ post: id });
     return res.status(200).json({ status: "success", data: comments });
   } catch (err) {
     return res.status(401).json({ error: err.message });
