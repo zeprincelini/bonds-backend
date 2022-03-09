@@ -31,16 +31,27 @@ const createComment = async (req, res) => {
   }
 };
 
-const updateComment = async (req, res) => {
+const getComments = async (req, res) => {
   const { postId } = req.body;
+  try {
+    const comments = await Comment.find({ post: postId });
+    return res.status(200).json({ status: "success", data: comments });
+  } catch (err) {
+    return res.status(401).json({ error: err.message });
+  }
+};
+
+const updateComment = async (req, res) => {
   const { id } = req.params;
   try {
     const comment = await Comment.findById(id);
-    if (comment.post === postId) {
-      await comment.updateOne({ $set: req.body });
-      return res
-        .status(200)
-        .json({ status: "success", message: "comment updated successfully" });
+    if (comment) {
+      const data = await Comment.updateOne({ $set: req.body, new: true });
+      return res.status(200).json({
+        status: "success",
+        message: "comment updated successfully",
+        data,
+      });
     }
   } catch (err) {
     return res.status(401).json({ error: err.message });
@@ -50,8 +61,7 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   const { id } = req.params;
   try {
-    const comment = await Comment.findById(id);
-    await comment.deleteOne();
+    const comment = await Comment.findByIdAndDelete(id);
     return res
       .status(200)
       .json({ status: "success", message: "comment deleted successfully" });
@@ -64,4 +74,5 @@ module.exports = {
   createComment,
   updateComment,
   deleteComment,
+  getComments,
 };
