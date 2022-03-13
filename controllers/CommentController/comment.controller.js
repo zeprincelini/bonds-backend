@@ -20,10 +20,10 @@ const createComment = async (req, res) => {
         message: comment,
       });
       const data = await newComment.save();
+      await post.updateOne({ $push: { comment: data._id } });
       return res.status(200).json({
         status: "success",
         message: "comment posted successfully",
-        data,
       });
     }
   } catch (err) {

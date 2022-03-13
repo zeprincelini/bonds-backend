@@ -95,7 +95,7 @@ const likePost = async (req, res) => {
 const getUserPosts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    const userPosts = await Post.find({ user: user._id });
+    const userPosts = await Post.find({ user: user._id }).populate("comment");
     return res.status("200").json({ status: "success", data: userPosts });
   } catch (err) {
     return res.status("401").json(err.message);
@@ -105,12 +105,12 @@ const getUserPosts = async (req, res) => {
 const getFriendPosts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    const usersPosts = await Post.find({ user: req.params.id }).populate(
-      "user"
-    );
+    const usersPosts = await Post.find({ user: req.params.id })
+      .populate("user")
+      .populate("comment");
     const friendsPosts = await Promise.all(
       user.following.map((id) => {
-        return Post.find({ user: id }).populate("user");
+        return Post.find({ user: id }).populate("user").populate("comment");
       })
     );
     return res.status("200").json({
@@ -124,7 +124,9 @@ const getFriendPosts = async (req, res) => {
 
 const getPostbyId = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate("user");
+    const post = await Post.findById(req.params.id)
+      .populate("user")
+      .populate("comment");
     const { updatedAt, ...rest } = post._doc;
     res.status("200").json({ status: "success", data: rest });
   } catch (err) {

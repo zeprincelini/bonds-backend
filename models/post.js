@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("./user");
-// const Comment = require("./comment");
+const Comment = require("./comment");
 
 const postSchema = new mongoose.Schema(
   {
@@ -8,10 +8,12 @@ const postSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: User,
     },
-    // comment: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: Comment,
-    // },
+    comment: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Comment,
+      },
+    ],
     description: {
       type: String,
       max: 500,
