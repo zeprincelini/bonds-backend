@@ -95,7 +95,10 @@ const likePost = async (req, res) => {
 const getUserPosts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    const userPosts = await Post.find({ user: user._id }).populate("comment");
+    const userPosts = await Post.find({ user: user._id }).populate({
+      path: "comment",
+      populate: { path: "user" },
+    });
     return res.status("200").json({ status: "success", data: userPosts });
   } catch (err) {
     return res.status("401").json(err.message);
@@ -107,10 +110,18 @@ const getFriendPosts = async (req, res) => {
     const user = await User.findById(req.params.id);
     const usersPosts = await Post.find({ user: req.params.id })
       .populate("user")
-      .populate("comment");
+      .populate({
+        path: "comment",
+        populate: { path: "user" },
+      });
     const friendsPosts = await Promise.all(
       user.following.map((id) => {
-        return Post.find({ user: id }).populate("user").populate("comment");
+        return Post.find({ user: id })
+          .populate("user")
+          .populate({
+            path: "comment",
+            populate: { path: "user" },
+          });
       })
     );
     return res.status("200").json({
@@ -126,7 +137,10 @@ const getPostbyId = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
       .populate("user")
-      .populate("comment");
+      .populate({
+        path: "comment",
+        populate: { path: "user" },
+      });
     const { updatedAt, ...rest } = post._doc;
     res.status("200").json({ status: "success", data: rest });
   } catch (err) {
