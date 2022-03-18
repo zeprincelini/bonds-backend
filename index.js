@@ -21,12 +21,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.ORIGIN,
     credentials: true,
   })
 );
 
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "dev") {
+  app.use(morgan("dev"));
+}
 app.use(helmet());
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);

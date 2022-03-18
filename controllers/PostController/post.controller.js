@@ -148,6 +148,21 @@ const getPostbyId = async (req, res) => {
   }
 };
 
+const getLikedPosts = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await Post.find({ likes: { $in: [id] } })
+      .populate("user")
+      .populate({
+        path: "comment",
+        populate: { path: "user" },
+      });
+    return res.status(200).json({ status: "success", data: post });
+  } catch (err) {
+    return res.status(501).json({ error: err.message });
+  }
+};
+
 module.exports = {
   createPost,
   updatePost,
@@ -156,4 +171,5 @@ module.exports = {
   getUserPosts,
   getFriendPosts,
   getPostbyId,
+  getLikedPosts,
 };
