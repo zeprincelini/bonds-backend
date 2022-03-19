@@ -51,14 +51,16 @@ const login = async (req, res) => {
       );
       res
         .cookie("token", token, {
-          // domain: process.env.ORIGIN,
+          path: "/",
+          domain: process.env.ORIGIN,
           expires: new Date(Date.now() + 172800 * 1000),
           secure: process.env.SECURE,
           httpOnly: false,
           sameSite: "none",
         })
         .cookie("id", JSON.stringify(user._id), {
-          // domain: process.env.ORIGIN,
+          path: "/",
+          domain: process.env.ORIGIN,
           expires: new Date(Date.now() + 172800 * 1000),
           secure: process.env.SECURE,
           httpOnly: false,
