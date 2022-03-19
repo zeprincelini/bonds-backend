@@ -51,14 +51,18 @@ const login = async (req, res) => {
       );
       res
         .cookie("token", token, {
+          // domain: process.env.ORIGIN,
           expires: new Date(Date.now() + 172800 * 1000),
-          secure: false,
+          secure: process.env.SECURE,
           httpOnly: false,
+          sameSite: "none",
         })
         .cookie("id", JSON.stringify(user._id), {
+          // domain: process.env.ORIGIN,
           expires: new Date(Date.now() + 172800 * 1000),
-          secure: false,
+          secure: process.env.SECURE,
           httpOnly: false,
+          sameSite: "none",
         });
       return res.status("200").json({
         status: "success",
@@ -75,7 +79,7 @@ const login = async (req, res) => {
       return res.status("404").json({ error: "user does not exist" });
     }
   } catch (err) {
-    return res.status("500").json(err);
+    return res.status("500").json(err.message);
   }
 };
 
