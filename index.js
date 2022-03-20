@@ -30,6 +30,7 @@ if (process.env.NODE_ENV === "dev") {
   app.use(morgan("dev"));
 }
 app.use(helmet());
+app.set("trust proxy", 1);
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/post", postRoute);

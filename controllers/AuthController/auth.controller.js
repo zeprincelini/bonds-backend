@@ -52,7 +52,7 @@ const login = async (req, res) => {
       res
         .cookie("token", token, {
           path: "/",
-          domain: process.env.ORIGIN,
+          //domain: process.env.ORIGIN,
           expires: new Date(Date.now() + 172800 * 1000),
           secure: process.env.SECURE,
           httpOnly: false,
@@ -60,7 +60,7 @@ const login = async (req, res) => {
         })
         .cookie("id", JSON.stringify(user._id), {
           path: "/",
-          domain: process.env.ORIGIN,
+          //domain: process.env.ORIGIN,
           expires: new Date(Date.now() + 172800 * 1000),
           secure: process.env.SECURE,
           httpOnly: false,
