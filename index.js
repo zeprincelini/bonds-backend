@@ -30,17 +30,17 @@ if (process.env.NODE_ENV === "dev") {
   app.use(morgan("dev"));
 }
 app.use(helmet());
-app.set("Access-Control-Allow-Origin", process.env.ORIGIN);
-app.set("Access-Control-Allow-Credentials", true);
-app.set("Access-Control-Allow-Methods", "GET, POST");
-app.set("Access-Control-Allow-Headers", "Content-Type, *");
-app.set("trust proxy", 1);
-app.use("/api/user", userRoute);
-app.use("/api/auth", authRoute);
-app.use("/api/post", postRoute);
-app.use("/api/conversation", conversationRoute);
-app.use("/api/chat", chatRoute);
-app.use("/api/comment", commentRoute);
+// app.set("Access-Control-Allow-Origin", process.env.ORIGIN);
+// app.set("Access-Control-Allow-Credentials", true);
+// app.set("Access-Control-Allow-Methods", "GET, POST");
+// app.set("Access-Control-Allow-Headers", "Content-Type, *");
+// app.set("trust proxy", 1);
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/post", postRoute);
+app.use("/api/v1/conversation", conversationRoute);
+app.use("/api/v1/chat", chatRoute);
+app.use("/api/v1/comment", commentRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
