@@ -18,6 +18,10 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.set("Access-Control-Allow-Origin", process.env.ORIGIN);
+app.set("Access-Control-Allow-Credentials", true);
+app.set("Access-Control-Allow-Methods", "GET, POST");
+app.set("Access-Control-Allow-Headers", "Content-Type, *");
 app.set("trust proxy", 1);
 app.use(cookieParser());
 app.use(
