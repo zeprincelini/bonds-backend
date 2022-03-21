@@ -8,7 +8,7 @@ const createPost = async (req, res) => {
       const newPost = new Post({
         user: req.body.user,
         description: req.body.description,
-        img: req.file.path ? req.file.path : null,
+        img: req.file?.path ? req.file.path : null,
       });
       const post = await newPost.save();
       res.status("200").json({
@@ -17,7 +17,6 @@ const createPost = async (req, res) => {
         data: post,
       });
     } catch (err) {
-      console.log(err);
       return res.status("403").json({
         error: "failed to create post",
       });
