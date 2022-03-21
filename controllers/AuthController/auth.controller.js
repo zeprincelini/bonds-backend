@@ -49,23 +49,23 @@ const login = async (req, res) => {
         { id: user._id, email: user.email, isAdmin: user.isAdmin },
         process.env.SECRET
       );
-      res
-        .cookie("token", token, {
-          path: "/",
-          domain: process.env.ORIGIN,
-          expires: new Date(Date.now() + 172800 * 1000),
-          secure: process.env.SECURE,
-          httpOnly: false,
-          sameSite: "none",
-        })
-        .cookie("id", JSON.stringify(user._id), {
-          path: "/",
-          domain: process.env.ORIGIN,
-          expires: new Date(Date.now() + 172800 * 1000),
-          secure: process.env.SECURE,
-          httpOnly: false,
-          sameSite: "none",
-        });
+      // res
+      //   .cookie("token", token, {
+      //     path: "/",
+      //     domain: process.env.ORIGIN,
+      //     expires: new Date(Date.now() + 172800 * 1000),
+      //     secure: process.env.SECURE,
+      //     httpOnly: false,
+      //     sameSite: "none",
+      //   })
+      //   .cookie("id", JSON.stringify(user._id), {
+      //     path: "/",
+      //     domain: process.env.ORIGIN,
+      //     expires: new Date(Date.now() + 172800 * 1000),
+      //     secure: process.env.SECURE,
+      //     httpOnly: false,
+      //     sameSite: "none",
+      //   });
       return res.status("200").json({
         status: "success",
         message: "Login successful",
